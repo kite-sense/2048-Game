@@ -1,5 +1,6 @@
 package model;
 
+import java.net.Socket;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -9,6 +10,8 @@ public class GridNumber {
 
     private int[][] numbers;
 
+    private int mergeNum;
+
     static Random random = new Random();
 
     public GridNumber(int xCount, int yCount) {
@@ -16,6 +19,7 @@ public class GridNumber {
         this.Y_COUNT = yCount;
         this.numbers = new int[this.X_COUNT][this.Y_COUNT];
         this.firstInitialNumbers();
+        this.mergeNum = 0;
     }
 
     public void firstInitialNumbers() {
@@ -52,25 +56,29 @@ public class GridNumber {
                     break;
                 }
                 if (j > 0) {
-                    if (numbers[i][j + 1] == numbers[i][j]) {
+                    if (numbers[i][j + 1] == numbers[i][j] && numbers[i][j] != 0) {
                         numbers[i][j + 1] *= 2;
                         numbers[i][j] = 0;
+                        mergeNum++;
                     }
-                    if (numbers[i][j - 1] == numbers[i][j]) {
+                    if (numbers[i][j - 1] == numbers[i][j] && numbers[i][j] != 0) {
                         numbers[i][j] *= 2;
                         numbers[i][j - 1] = 0;
+                        mergeNum++;
                     }
                 }
                 if (j == 0) {
-                    if (numbers[i][j + 1] == numbers[i][j]) {
+                    if (numbers[i][j + 1] == numbers[i][j] && numbers[i][j] != 0) {
                         numbers[i][j + 1] *= 2;
                         numbers[i][j] = 0;
+                        mergeNum++;
                     }
                 }
             }
         }
         numToRight(numbers);
         generate2();
+        System.out.printf("Merge Numbers: %d\n",mergeNum);
     }
 
     private static void numToRight(int[][] numbers) {
