@@ -1,6 +1,5 @@
 package model;
 
-import java.net.Socket;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -77,8 +76,8 @@ public class GridNumber {
             }
         }
         numToRight(numbers);
-        generate2();
-        System.out.printf("Merge Numbers: %d\n",mergeNum);
+        generate2or4();
+        System.out.printf("Merge Numbers: %d\n", mergeNum);
     }
 
     private static void numToRight(int[][] numbers) {
@@ -151,8 +150,9 @@ public class GridNumber {
     }
 
 
-    public void generate2() {
+    public void generate2or4() {
         int ran;
+        int ran2;
         int gridNum = 1;
         int zeroNum = 0;
         for (int i = 0; i < numbers.length; i++) {
@@ -163,12 +163,17 @@ public class GridNumber {
             }
         }
         ran = random.nextInt(zeroNum) + 1;
+        ran2 = random.nextInt(5);
         outer:
         for (int i = 0; i < numbers.length; i++) {
             for (int j = 0; j < numbers[i].length; j++) {
                 if (numbers[i][j] == 0) {
                     if (gridNum == ran) {
-                        numbers[i][j] = 2;
+                        if (ran2 == 0) {
+                            numbers[i][j] = 4;
+                        } else {
+                            numbers[i][j] = 2;
+                        }
                         break outer;
                     } else {
                         gridNum++;
