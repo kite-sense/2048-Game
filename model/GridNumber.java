@@ -77,7 +77,23 @@ public class GridNumber {
         }
         numToRight(numbers);
         generate2or4();
+        winCall(numbers);
+        loseCall(numbers);
         System.out.printf("Merge Numbers: %d\n", mergeNum);
+    }
+
+    private static void winCall(int[][] numbers) {
+        for (int i = 0; i < numbers.length; i++) {
+            for (int j = 0; j < numbers[0].length; j++) {
+                if (numbers[i][j] == 2048) {
+                    //terminate the game and show the victory board
+                }
+            }
+        }
+    }
+
+    private static void loseCall(int[][] numbers) {
+
     }
 
     private static void numToRight(int[][] numbers) {
