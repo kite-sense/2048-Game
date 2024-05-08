@@ -7,7 +7,7 @@ import java.awt.*;
 
 
 public class GamePanel extends ListenerPanel {
-    private final int COUNT = 4;
+    private final int COUNT;
     private GridComponent[][] grids;
 
     private GridNumber model;
@@ -15,12 +15,13 @@ public class GamePanel extends ListenerPanel {
     private int steps;
     private final int GRID_SIZE;
 
-    public GamePanel(int size) {
+    public GamePanel(int size,int COUNT) {
         this.setVisible(true);
         this.setFocusable(true);
         this.setLayout(null);
         this.setBackground(Color.DARK_GRAY);
         this.setSize(size, size);
+        this.COUNT=COUNT;
         this.GRID_SIZE = size / COUNT;
         this.grids = new GridComponent[COUNT][COUNT];
         this.model = new GridNumber(COUNT, COUNT);
@@ -65,6 +66,8 @@ public class GamePanel extends ListenerPanel {
         this.afterMove();
         this.model.moveRight();
         this.updateGridsNumber();
+        loseCall(this.model.getNumbers());
+        winCall(this.model.getNumbers());
     }
 
     @Override
@@ -73,6 +76,8 @@ public class GamePanel extends ListenerPanel {
         this.afterMove();
         this.model.moveLeft();
         this.updateGridsNumber();
+        loseCall(this.model.getNumbers());
+        winCall(this.model.getNumbers());
     }
 
     @Override
@@ -81,6 +86,8 @@ public class GamePanel extends ListenerPanel {
         this.afterMove();
         this.model.moveUp();
         this.updateGridsNumber();
+        loseCall(this.model.getNumbers());
+        winCall(this.model.getNumbers());
     }
 
     @Override
@@ -89,6 +96,60 @@ public class GamePanel extends ListenerPanel {
         this.afterMove();
         this.model.moveDown();
         this.updateGridsNumber();
+        loseCall(this.model.getNumbers());
+        winCall(this.model.getNumbers());
+    }
+
+    private static void winCall(int[][] numbers) {
+        for (int i = 0; i < numbers.length; i++) {
+            for (int j = 0; j < numbers[0].length; j++) {
+                if (numbers[i][j] == 2048) {
+                    //terminate the game and show the victory board
+                }
+            }
+        }
+    }
+
+    private static void loseCall(int[][] numbers) {
+        int zeroNum = 0;
+        int equalNum = 0;
+        for (int i = 0; i < numbers.length; i++) {
+            for (int j = 0; j < numbers[0].length; j++) {
+                if (numbers[i][j] == 0) {
+                    zeroNum++;
+                }
+            }
+        }
+        if (zeroNum == 0) {
+            for (int i = 0; i < numbers.length; i++) {
+                for (int j = 0; j <= numbers[0].length - 2; j++) {
+                    if (numbers[i][j] == numbers[i][j + 1]) {
+                        equalNum++;
+                    }
+                }
+            }
+            int[][] transpose = transpose(numbers);
+            for (int i = 0; i < transpose.length; i++) {
+                for (int j = 0; j <= transpose[0].length - 2; j++) {
+                    if (numbers[i][j] == numbers[i][j + 1]) {
+                        equalNum++;
+                    }
+                }
+            }
+            if (equalNum == 0) {
+                //lose the game and terminate the game
+            }
+        }
+    }
+
+    private static int[][] transpose(int[][] define) {
+        int[][] arr2 = new int[define[0].length][define.length];
+        for (int i = 0; i < define[0].length; i++) {
+            for (int j = 0; j < define.length; j++) {
+                arr2[i][j] = define[j][i];
+            }
+        }
+        return arr2;
     }
 
     public void afterMove() {
