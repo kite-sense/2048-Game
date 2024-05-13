@@ -31,7 +31,9 @@ public abstract class ListenerPanel extends JPanel {
     public abstract void doMoveRight();
 
     public abstract void doMoveLeft();
+
     public abstract void doMoveUP();
+
     public abstract void doMoveDown();
 
 }

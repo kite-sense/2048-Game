@@ -1,27 +1,29 @@
 package view;
 
 import model.GridNumber;
+import util.AdvancedFileUtil;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class GamePanel extends ListenerPanel {
     private final int COUNT;
     private GridComponent[][] grids;
-
     private GridNumber model;
     private JLabel stepLabel;
     private int steps;
     private final int GRID_SIZE;
 
-    public GamePanel(int size,int COUNT) {
+    public GamePanel(int size, int COUNT) {
         this.setVisible(true);
         this.setFocusable(true);
         this.setLayout(null);
         this.setBackground(Color.DARK_GRAY);
         this.setSize(size, size);
-        this.COUNT=COUNT;
+        this.COUNT = COUNT;
         this.GRID_SIZE = size / COUNT;
         this.grids = new GridComponent[COUNT][COUNT];
         this.model = new GridNumber(COUNT, COUNT);
@@ -32,6 +34,7 @@ public class GamePanel extends ListenerPanel {
     public GridNumber getModel() {
         return model;
     }
+
 
     public void initialGame() {
         this.steps = 0;
@@ -105,6 +108,8 @@ public class GamePanel extends ListenerPanel {
             for (int j = 0; j < numbers[0].length; j++) {
                 if (numbers[i][j] == 2048) {
                     //terminate the game and show the victory board
+                    JOptionPane.showMessageDialog(null, "VICTORY");
+                    Thread.currentThread().interrupt();
                 }
             }
         }
@@ -128,16 +133,25 @@ public class GamePanel extends ListenerPanel {
                     }
                 }
             }
-            int[][] transpose = transpose(numbers);
-            for (int i = 0; i < transpose.length; i++) {
-                for (int j = 0; j <= transpose[0].length - 2; j++) {
-                    if (numbers[i][j] == numbers[i][j + 1]) {
+//            int[][] transpose = transpose(numbers);
+//            for (int i = 0; i < transpose.length; i++) {
+//                for (int j = 0; j <= transpose[0].length - 2; j++) {
+//                    if (numbers[i][j] == numbers[i][j + 1]) {
+//                        equalNum++;
+//                    }
+//                }
+//            }
+            for (int i = 0; i < numbers[0].length; i++) {
+                for (int j = 0; j <= numbers.length - 2; j++) {
+                    if (numbers[j][i] == numbers[j + 1][i]) {
                         equalNum++;
                     }
                 }
             }
             if (equalNum == 0) {
                 //lose the game and terminate the game
+                JOptionPane.showMessageDialog(null, "FAILURE");
+                Thread.currentThread().interrupt();
             }
         }
     }
@@ -152,9 +166,23 @@ public class GamePanel extends ListenerPanel {
         return arr2;
     }
 
+    public void clearStep() {
+        this.steps = 0;
+        this.stepLabel.setText(String.format("Step: %d", this.steps));
+    }
+
+    public void loadGameStep(int step) {
+        this.steps = step;
+        this.stepLabel.setText(String.format("Step: %d", this.steps));
+    }
+
     public void afterMove() {
         this.steps++;
         this.stepLabel.setText(String.format("Step: %d", this.steps));
+    }
+
+    public int getSteps() {
+        return steps;
     }
 
     public void setStepLabel(JLabel stepLabel) {
